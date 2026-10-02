@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+tasks:
+  build-jar:
+    desc: Build a fat JAR ready to run
+    dir: backend
+    cmd: ./mvnw clean package -DskipTests
+  
+  build-native:
+    desc: Build a binary-native image
+    dir: backend
+    cmd: time ./mvnw -Pnative package
+
+  run-dev:
+    desc: Run the app in dev mode
+    dir: backend
+    deps: [db-up]
+    cmd: |
+      java \
+        -Dorg.slf4j.simpleLogger.log.com.thermcampos="info" \
+        -jar target/rinha2026-1.0-SNAPSHOT.jar
+
+  run-native-tracing:
+    desc: Buidl and run with native agent to trace reflections
+    dir: backend
+    deps: [db-up]
+    cmd: |
+      ./mvnw clean package -DskipTests && \
+        java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image \
+        -jar target/rinha2026-1.0-SNAPSHOT.jar
+
+  run-native:
+    desc: Run the native binary
+    deps: [db-up]
+    cmd: export ORDER_DB_MIGRATIONS_PATH="backend/db/migration" && ./backend/target/app-native
+
+  test:
+    desc: Run tests
+    dir: backend
+    cmd: ./mvnw test
+
+  db-up:
+    desc: Starts the database using Docker
+    cmd: docker compose up -d
+
+  db-down:
+    desc: Stops the database using Docker
+    cmd: docker compose down
+
