@@ -41,7 +41,10 @@ jobs:
         working-directory: ./backend
         run: ./mvnw -P native package
 
-      - name: Push imagese
+      - name: Tag image
+        run: docker tag app-native ${{ env.DOCKER_IMAGE }}:latest
+
+      - name: Push image
         run: |
           docker push ${{ env.DOCKER_IMAGE }}:latest
 

@@ -82,7 +82,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <mainClass>com.thermcampos.App</mainClass>
-                            <imageName>ghcr.io/thermcampos/rinha-de-backend-2026/backend</imageName>
+                            <imageName>app-native</imageName>
                             <buildArgs>
                                 <buildArg>--enable-url-protocols=https</buildArg>
                             </buildArgs>
