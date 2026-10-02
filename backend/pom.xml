@@ -85,6 +85,8 @@
                             <imageName>app-native</imageName>
                             <buildArgs>
                                 <buildArg>--enable-url-protocols=https</buildArg>
+                                <buildArg>--static</buildArg>
+                                <buildArg>--libc=musl</buildArg>
                             </buildArgs>
                         </configuration>
                         <executions>

@@ -1,0 +1,4 @@
+FROM scratch
+COPY target/app-native /app
+EXPOSE 9999
+ENTRYPOINT ["/app"]
