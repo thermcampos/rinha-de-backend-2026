@@ -1,0 +1,48 @@
+---
+
+services:
+  rinha-db:
+    image: postgres:16-alpine
+    container_name: rinha-db
+    environment:
+      POSTGRES_USER: rinha
+      POSTGRES_PASSWORD: rinha
+      POSTGRES_DB: rinha
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rinha"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rinha-network
+
+  rinha-backend:
+    container_name: rinha-backend
+    user: ${UID:-1000}:${GID:-1000}
+    environment:
+      RINHA_SERVER_PORT: 8080
+      RINHA_DB_URL: jdbc:postgresql://rinha-db:5432/rinha
+    ports:
+      - 8080:8080
+    image: maven:3.9.12-eclipse-temurin-25
+    entrypoint: './mvnw -ntp compile exec:java -Dexec.mainClass=com.thermcampos.App -Dorg.slf4j.simpleLogger.log.com.thermcampos="info"'
+    working_dir: /app
+    volumes:
+      - "./backend:/app"
+    healthcheck:
+      test: curl -f http://localhost:8080/health | grep '"status":"UP"'
+      interval: 1m30s
+      timeout: 15s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      rinha-db:
+        condition: service_healthy
+    networks:
+      - rinha-network
+
+networks:
+  rinha-network:
+

@@ -1,6 +1,5 @@
 package com.thermcampos.config;
 
-import com.thermcampos.config.PropertiesLoadConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;
@@ -15,11 +14,13 @@ public class DbConfig {
 
     public HikariDataSource create() {
         var config = new HikariConfig();
-        config.setJdbcUrl(props.get("order.db.url", "jdbc:postgresql://localhost:5432/rinha"));
-        config.setUsername(props.get("order.db.user", "rinha"));
-        config.setPassword(props.get("order.db.password", "rinha"));
-        config.setMaximumPoolSize(props.getInt("order.db.max.pool.size", 10));
-        config.setPoolName(props.get("order.db.pool.name", "rinha-pool"));
+        config.setJdbcUrl(props.get("rinha.db.url", "jdbc:postgresql://localhost:5432/rinha"));
+        config.setUsername(props.get("rinha.db.user", "rinha"));
+        config.setPassword(props.get("rinha.db.password", "rinha"));
+        config.setMaximumPoolSize(props.getInt("rinha.db.max.pool.size", 10));
+
+        String instance = props.get(" rinha.server.instance", " _one") + "-";
+        config.setPoolName(instance + props.get("rinha.db.pool.name", "rinha-pool"));
         return new HikariDataSource(config);
     }
 

@@ -5,21 +5,19 @@ import com.thermcampos.config.DbConfig;
 import com.thermcampos.mapper.CustomJsonMapper;
 import com.thermcampos.config.PropertiesLoadConfig;
 import com.thermcampos.health.HealthRoutes;
-import com.zaxxer.hikari.HikariDataSource;
+import com.thermcampos.logger.AppLogger;
 import io.javalin.Javalin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class App {
 
-    private static final Logger logger = LoggerFactory.getLogger(App.class.getName());
-
     public static void main(String[] args) {
-        logger.info("Starting app");
-
         var props = new PropertiesLoadConfig("application.properties");
+        var logger = new AppLogger(App.class, props);
+
+        logger.info("Starting app");
+        
         var dbConfig = new DbConfig(props);
-        HikariDataSource dataSource = dbConfig.create();
+        var dataSource = dbConfig.create();
         dbConfig.migrateFlyway(dataSource);
 
         var app = Javalin.create(config -> {
@@ -45,7 +43,6 @@ public class App {
             app.stop();
         }));
 
-        app.start(props.getInt("order.server.port", 8080));
+        app.start(props.getInt("rinha.server.port", 8080));
     }
 }
-

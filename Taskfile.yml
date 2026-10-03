@@ -13,14 +13,13 @@ tasks:
     dir: backend
     cmd: time ./mvnw -Pnative package
 
-  run-dev:
+  dev-up:
     desc: Run the app in dev mode
-    dir: backend
-    deps: [db-up]
-    cmd: |
-      java \
-        -Dorg.slf4j.simpleLogger.log.com.thermcampos="info" \
-        -jar target/rinha2026-1.0-SNAPSHOT.jar
+    cmd: docker compose -f compose.dev.yaml up -d
+
+  dev-down:
+    desc: Stops the database and backend
+    cmd: docker compose -f compose.dev.yaml down -v --remove-orphans
 
   run-native-tracing:
     desc: Buidl and run with native agent to trace reflections
@@ -43,9 +42,9 @@ tasks:
 
   db-up:
     desc: Starts the database using Docker
-    cmd: docker compose up -d
+    cmd: docker compose -f compose.dev.yaml up rinha-db -d
 
   db-down:
     desc: Stops the database using Docker
-    cmd: docker compose down
+    cmd: docker compose -f compose.dev.yaml down rinha-db -v --remove-orphans
 
