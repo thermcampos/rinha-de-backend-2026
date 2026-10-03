@@ -21,6 +21,14 @@ tasks:
     desc: Stops the database and backend
     cmd: docker compose -f compose.dev.yaml down -v --remove-orphans
 
+  prod-like-up:
+    desc: Starts database and two instances using OS-native binary backend
+    cmd: docker compose up -d
+
+  prod-like-down:
+    desc: Stops database and the backend instances
+    cmd: docker compose down -v --remove-orphans
+
   run-native-tracing:
     desc: Buidl and run with native agent to trace reflections
     dir: backend
