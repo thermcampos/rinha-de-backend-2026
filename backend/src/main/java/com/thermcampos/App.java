@@ -4,6 +4,7 @@ import com.thermcampos.config.AppConfig;
 import com.thermcampos.config.DbConfig;
 import com.thermcampos.mapper.CustomJsonMapper;
 import com.thermcampos.config.PropertiesLoadConfig;
+import com.thermcampos.fraudscore.FraudScoreRoutes;
 import com.thermcampos.health.HealthRoutes;
 import com.thermcampos.logger.AppLogger;
 import io.javalin.Javalin;
@@ -36,6 +37,7 @@ public class App {
             
             // Routes
             HealthRoutes.register(config);
+            FraudScoreRoutes.register(config);
         });
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
