@@ -1,6 +1,21 @@
 ---
 
 services:
+  rinha-lb:
+    image: haproxy:3.4-alpine
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - "9999:9999"
+    depends_on:
+      - rinha-backend-one
+      - rinha-backend-rwo
+    deploy:
+      resources:
+        limits:
+          cpus: "0.40"
+          memory: 20MB
+
   rinha-prod-db:
     image: postgres:16-alpine
     container_name: rinha-prod-db
@@ -34,6 +49,11 @@ services:
         condition: service_healthy
     networks:
       - rinha-network-prod
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: 165MB
 
   rinha-backend-two:
     container_name: rinha-backend-two
@@ -51,6 +71,11 @@ services:
         condition: service_healthy
     networks:
       - rinha-network-prod
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: 165MB
 
 networks:
   rinha-network-prod:
