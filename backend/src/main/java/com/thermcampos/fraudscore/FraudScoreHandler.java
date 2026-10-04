@@ -25,11 +25,11 @@ public class FraudScoreHandler {
 
       // 4. computes the score (threshold 0.6)
       /* .. code here .. */
-      BigDecimal threshold = new BigDecimal(0.2);
+      BigDecimal threshold = new BigDecimal("0.2");
       
       // 5. response
       FraudScoreResponse response = new FraudScoreResponse(
-          BigDecimal.valueOf("0.6").compareTo(threshold) < 1,
+          new BigDecimal("0.6").compareTo(threshold) < 1,
           threshold);
       ctx.status(HttpStatus.OK).json(response);
     } catch (Exception e) {
